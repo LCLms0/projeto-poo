@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('nome', 100);
             $table->decimal('preco', 8, 2);
             $table->text('descricao')->nullable();
-            $table->timestamps(); // Cria os campos created_at e updated_at automaticamente
+            $table->string('foto')->default('default-service.png'); 
+            $table->timestamps();
         });
     }
 

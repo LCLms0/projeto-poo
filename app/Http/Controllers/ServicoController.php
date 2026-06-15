@@ -3,64 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Models\Servico;
-use App\Http\Requests\StoreServicoRequest;
-use App\Http\Requests\UpdateServicoRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ServicoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $servicos = Servico::all();
+        return view('servicos.index', compact('servicos'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
-        //
+        return view('servicos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreServicoRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Validação
+        $dados = $request->validate([
+            'nome' => 'required|string|max:255',
+            'preco' => 'required|numeric|min:0',
+            'descricao' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        // Lógica de upload da foto
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            $dados['foto'] = $request->file('foto')->store('servicos', 'public');
+        }
+        Servico::create($dados);
+        return redirect()->route('servicos.index')->with('sucesso', 'Serviço criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Servico $servico)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Servico $servico)
     {
-        //
+        return view('servicos.edit', compact('servico'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateServicoRequest $request, Servico $servico)
+    public function update(Request $request, Servico $servico)
     {
-        //
+        $dados = $request->validate([
+            'nome' => 'required|string|max:255',
+            'preco' => 'required|numeric|min:0',
+            'descricao' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            if ($servico->foto) {
+                Storage::disk('public')->delete($servico->foto);
+            }
+            $dados['foto'] = $request->file('foto')->store('servicos', 'public');
+        }
+        $servico->update($dados);
+        return redirect()->route('servicos.index')->with('sucesso', 'Serviço atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Servico $servico)
     {
-        //
+        if ($servico->foto) {
+            Storage::disk('public')->delete($servico->foto);
+        }
+
+        $servico->delete();
+
+        return redirect()->route('servicos.index')->with('sucesso', 'Serviço excluído com sucesso!');
     }
 }
