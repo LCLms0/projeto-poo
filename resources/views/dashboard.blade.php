@@ -34,11 +34,11 @@
                         <div class="col-10 col-sm-6 col-lg-4 mx-auto">
                             <div class="p-4 rounded-3 text-white h-100 d-flex align-items-center justify-content-between card-dashboard-info card-azul">
                                 <div>
-                                    <span class="text-white-50 small text-uppercase fw-bold d-block mb-1 label-card-dashboard">Clientes Ativos</span>
-                                    <h3 class="fs-1 fw-bold mb-0 montserrat">0</h3> 
+                                    <span class="text-white-50 small text-uppercase fw-bold d-block mb-1 label-card-dashboard">Produtos em Estoque</span>
+                                    <h3 class="fs-1 fw-bold mb-0 montserrat">{{ $totalProdutos }}</h3> 
                                 </div>
                                 <div class="rounded-circle d-flex align-items-center justify-content-center icone-container-dashboard">
-                                    <i class="bi bi-people-fill fs-2 text-white"></i>
+                                    <i class="bi bi-box-seam fs-2 text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <div class="p-4 rounded-3 text-white h-100 d-flex align-items-center justify-content-between card-dashboard-info card-verde">
                                 <div>
                                     <span class="text-white-50 small text-uppercase fw-bold d-block mb-1 label-card-dashboard">Equipe / Barbeiros</span>
-                                    <h3 class="fs-1 fw-bold mb-0 montserrat">0</h3>
+                                    <h3 class="fs-1 fw-bold mb-0 montserrat">{{ $totalBarbeiros }}</h3>
                                 </div>
                                 <div class="rounded-circle d-flex align-items-center justify-content-center icone-container-dashboard">
                                     <i class="bi bi-scissors fs-2 text-white"></i>
@@ -59,7 +59,7 @@
                             <div class="p-4 rounded-3 text-white h-100 d-flex align-items-center justify-content-between card-dashboard-info card-laranja">
                                 <div>
                                     <span class="text-white-50 small text-uppercase fw-bold d-block mb-1 label-card-dashboard">Serviços no Menu</span>
-                                    <h3 class="fs-1 fw-bold mb-0 montserrat">0</h3>
+                                    <h3 class="fs-1 fw-bold mb-0 montserrat">{{ $totalServicos }}</h3>
                                 </div>
                                 <div class="rounded-circle d-flex align-items-center justify-content-center icone-container-dashboard">
                                     <i class="bi bi-card-checklist fs-2 text-white"></i>

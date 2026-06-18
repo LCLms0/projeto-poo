@@ -9,8 +9,8 @@
             <i class="bi bi-house-door-fill me-2"></i> Início
         </a>
 
-        <a class="nav-link text-white btn-sidebar mb-4" href="#">
-            <i class="bi bi-people-fill me-2"></i> Clientes
+        <a class="nav-link text-white btn-sidebar mb-4" href="{{ route('produtos.index') }}">
+            <i class="bi bi-box-seam me-2"></i> Produtos
         </a>
 
         <a class="nav-link text-white btn-sidebar mb-4" href="{{ route('barbeiros.index') }}">
