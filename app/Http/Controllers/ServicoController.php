@@ -21,17 +21,19 @@ class ServicoController extends Controller
 
     public function store(Request $request)
     {
-        // Validação
         $dados = $request->validate([
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric|min:0',
             'descricao' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        // Lógica de upload da foto
+
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
             $dados['foto'] = $request->file('foto')->store('servicos', 'public');
+        } else {
+            $dados['foto'] = ''; 
         }
+
         Servico::create($dados);
         return redirect()->route('servicos.index')->with('sucesso', 'Serviço criado com sucesso!');
     }
@@ -51,23 +53,25 @@ class ServicoController extends Controller
         ]);
 
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
-            if ($servico->foto) {
+            if (!empty($servico->foto) && Storage::disk('public')->exists($servico->foto)) {
                 Storage::disk('public')->delete($servico->foto);
             }
             $dados['foto'] = $request->file('foto')->store('servicos', 'public');
+        } else {
+            $dados['foto'] = ''; 
         }
+
         $servico->update($dados);
         return redirect()->route('servicos.index')->with('sucesso', 'Serviço atualizado com sucesso!');
     }
 
     public function destroy(Servico $servico)
     {
-        if ($servico->foto) {
+        if (!empty($servico->foto) && Storage::disk('public')->exists($servico->foto)) {
             Storage::disk('public')->delete($servico->foto);
         }
 
         $servico->delete();
-
         return redirect()->route('servicos.index')->with('sucesso', 'Serviço excluído com sucesso!');
     }
 }
