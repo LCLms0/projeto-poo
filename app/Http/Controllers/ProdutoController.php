@@ -38,6 +38,8 @@ class ProdutoController extends Controller
 
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
             $dados['foto'] = $request->file('foto')->store('produtos', 'public');
+        } else {
+            $dados['foto'] = null; 
         }
 
         Produto::create($dados);
@@ -80,6 +82,8 @@ class ProdutoController extends Controller
                     Storage::disk('public')->delete($produto->foto);
                 }
                 $dados['foto'] = $request->file('foto')->store('produtos', 'public');
+            } else {
+                $dados['foto'] = null; 
             }
 
             $produto->update($dados);

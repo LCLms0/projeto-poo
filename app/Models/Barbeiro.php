@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Barbeiro extends Model
 {
-    protected $fillable = ['nome', 'bio', 'foto'];
+    protected $fillable = ['nome', 'telefone', 'especialidade', 'bio', 'foto'];
 }
 
         

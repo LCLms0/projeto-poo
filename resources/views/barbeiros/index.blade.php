@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos | Barber Control</title>
+    <title>Barbeiros | Barber Control</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -22,22 +22,22 @@
                 <div class="p-4 rounded-3 mb-4 d-flex flex-column" style="background-color: #1e2125;">
                     
                     <h1 class="text-white montserrat">
-                        <i class="bi bi-box-seam me-2"></i> Produtos
+                        <i class="bi bi-scissors me-2"></i> Barbeiros
                     </h1>
                     <h2 class="fs-5 text-white mb-4">
-                        Gerencie o estoque de produtos da barbearia, marcas, preços de venda e quantidades.
+                        Gerencie a equipe de barbeiros, informações de contato e suas respectivas especialidades.
                     </h2>
 
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-                        <button class="btn-login px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalProduto">
-                            Adicionar Produto
+                        <button class="btn-login px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalBarbeiro">
+                            Adicionar Barbeiro
                         </button>
 
                         <div class="position-relative" style="width: 100%; max-width: 350px;">
                             <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
                                 <i class="bi bi-search text-primary"></i>
                             </span>
-                            <input type="text" id="pesquisaProduto" class="form-control ps-5" placeholder="Buscar produto pelo nome...">
+                            <input type="text" id="pesquisaBarbeiro" class="form-control ps-5" placeholder="Buscar barbeiro pelo nome...">
                         </div>
                     </div>
 
@@ -63,46 +63,43 @@
                     @endif
     
                     <div class="card-exibir w-100 mt-2">
-                        @if($produtos->isEmpty())
-                            <p class="text-white-50 text-muted text-center my-4">Nenhum produto cadastrado ainda.</p>
+                        @if($barbeiros->isEmpty())
+                            <p class="text-white-50 text-muted text-center my-4">Nenhum barbeiro cadastrado ainda.</p>
                         @else
                             <div class="container-scroll-servicos">
                                 <div class="grid-servicos">
-                                    @foreach ($produtos as $produto)
+                                    @foreach ($barbeiros as $barbeiro)
                                         
-                                        <div class="card-servico-custom" data-bs-toggle="modal" data-bs-target="#modalDetalhesProduto{{ $produto->id }}">
-                                            @if(!empty($produto->foto))
-                                                <img src="{{ asset('storage/' . $produto->foto) }}" class="card-servico-img" alt="{{ $produto->nome }}">
+                                        <div class="card-servico-custom" data-bs-toggle="modal" data-bs-target="#modalDetalhesBarbeiro{{ $barbeiro->id }}">
+                                            @if(!empty($barbeiro->foto))
+                                                <img src="{{ asset('storage/' . $barbeiro->foto) }}" class="card-servico-img" alt="{{ $barbeiro->nome }}">
                                             @else
                                                 <div class="card-servico-img bg-secondary d-flex align-items-center justify-content-center text-white-50" style="height: 160px;">
-                                                    <i class="bi bi-image fs-1"></i>
+                                                    <i class="bi bi-person-bounding-box fs-1"></i>
                                                 </div>
                                             @endif
                                             
                                             <div class="card-servico-corpo">
-                                                <h3 class="text-white fs-5 mb-1 montserrat">{{ $produto->nome }}</h3>
+                                                <h3 class="text-white fs-5 mb-1 montserrat">{{ $barbeiro->nome }}</h3>
                                                 
                                                 <div class="text-primary small mb-2 fw-semibold">
-                                                    <i class="bi bi-tags me-1"></i> Marca: {{ $produto->marca }}
+                                                    <i class="bi bi-scissors me-1"></i> Esp: {{ !empty($barbeiro->especialidade) ? $barbeiro->especialidade : 'Geral' }}
                                                 </div>
                                                 
                                                 <p class="descricao-cortada text-white-50">
-                                                    Preço: R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}
+                                                    {{ $barbeiro->bio ?? 'Sem biografia disponível.' }}
                                                 </p>
                                                 
                                                 <div class="mt-auto d-flex justify-content-between align-items-center" onclick="event.stopPropagation();">
                                                     <span class="text-muted small">
-                                                        <i class="bi bi-box me-1"></i> Qtd: 
-                                                        <span class="badge {{ $produto->quantidade_estoque > 5 ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $produto->quantidade_estoque }} un
-                                                        </span>
+                                                        <i class="bi bi-telephone me-1"></i> {{ $barbeiro->telefone ?? 'Sem telefone' }}
                                                     </span>
                                                     
                                                     <div>
-                                                        <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#modalEditarProduto{{ $produto->id }}" title="Editar">
+                                                        <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#modalEditarBarbeiro{{ $barbeiro->id }}" title="Editar">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-lixeira-dark" data-bs-toggle="modal" data-bs-target="#modalDeletarProduto{{ $produto->id }}" title="Deletar">
+                                                        <button class="btn btn-sm btn-lixeira-dark" data-bs-toggle="modal" data-bs-target="#modalDeletarBarbeiro{{ $barbeiro->id }}" title="Deletar">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -110,9 +107,9 @@
                                             </div>
                                         </div>
 
-                                        @include('produtos.modals.details')
-                                        @include('produtos.modals.edit')
-                                        @include('produtos.modals.delete')
+                                        @include('barbeiros.modals.details')
+                                        @include('barbeiros.modals.edit')
+                                        @include('barbeiros.modals.delete')
 
                                     @endforeach
                                 </div>
@@ -124,20 +121,20 @@
         </div>            
     </div>
 
-    @include('produtos.modals.create')
+    @include('barbeiros.modals.create')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const inputPesquisa = document.getElementById('pesquisaProduto');
+        const inputPesquisa = document.getElementById('pesquisaBarbeiro');
         if (inputPesquisa) {
             inputPesquisa.addEventListener('input', function() {
                 const termo = this.value.toLowerCase().trim();
                 const cards = document.querySelectorAll('.card-servico-custom');
 
                 cards.forEach(card => {
-                    const nomeProduto = card.querySelector('h3').textContent.toLowerCase();
-                    if (nomeProduto.includes(termo)) {
+                    const nomeBarbeiro = card.querySelector('h3').textContent.toLowerCase();
+                    if (nomeBarbeiro.includes(termo)) {
                         card.style.setProperty("display", "flex", "important"); 
                     } else {
                         card.style.setProperty("display", "none", "important");
@@ -148,10 +145,10 @@
 
         @if ($errors->any())
             @if (session()->has('modal_error_id'))
-                var modalEditar = new bootstrap.Modal(document.getElementById('modalEditarProduto' + '{{ session('modal_error_id') }}'));
+                var modalEditar = new bootstrap.Modal(document.getElementById('modalEditarBarbeiro' + '{{ session('modal_error_id') }}'));
                 modalEditar.show();
             @else
-                var modalCriar = new bootstrap.Modal(document.getElementById('modalProduto'));
+                var modalCriar = new bootstrap.Modal(document.getElementById('modalBarbeiro'));
                 modalCriar.show();
             @endif
         @endif

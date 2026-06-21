@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('marca', 50);
             $table->decimal('preco_venda', 8, 2);
             $table->integer('quantidade_estoque');
-            $table->string('foto')->default('default-product.png'); // <-- Foto do produto
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

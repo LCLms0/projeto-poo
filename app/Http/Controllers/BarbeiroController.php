@@ -23,12 +23,16 @@ class BarbeiroController extends Controller
     {
         $dados = $request->validate([
             'nome' => 'required|string|max:255',
+            'telefone' => 'nullable|string|max:20',
+            'especialidade' => 'nullable|string|max:100',
             'bio' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
             $dados['foto'] = $request->file('foto')->store('barbeiros', 'public');
+        } else {
+            $dados['foto'] = ''; // String vazia para evitar quebras de nulo se necessário
         }
 
         Barbeiro::create($dados);
@@ -45,12 +49,14 @@ class BarbeiroController extends Controller
     {
         $dados = $request->validate([
             'nome' => 'required|string|max:255',
+            'telefone' => 'nullable|string|max:20',
+            'especialidade' => 'nullable|string|max:100',
             'bio' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
-            if ($barbeiro->foto) {
+            if (!empty($barbeiro->foto) && Storage::disk('public')->exists($barbeiro->foto)) {
                 Storage::disk('public')->delete($barbeiro->foto);
             }
             $dados['foto'] = $request->file('foto')->store('barbeiros', 'public');
@@ -63,7 +69,7 @@ class BarbeiroController extends Controller
 
     public function destroy(Barbeiro $barbeiro)
     {
-        if ($barbeiro->foto) {
+        if (!empty($barbeiro->foto) && Storage::disk('public')->exists($barbeiro->foto)) {
             Storage::disk('public')->delete($barbeiro->foto);
         }
 
